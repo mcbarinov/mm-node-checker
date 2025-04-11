@@ -1,0 +1,21 @@
+{% extends "inc/base.j2" %}
+{% block content %}
+  <div>
+    <h3>networks</h3>
+  </div>
+
+  <table>
+    <tr>
+      <th>network</th>
+      <th>all</th>
+      <th>live</th>
+    </tr>
+    {% for n in info %}
+      <tr>
+        <td>{{ n.network.value }}</td>
+        <td>{{ n.all_nodes }}</td>
+        <td>{{ n.live_nodes }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+{% endblock %}

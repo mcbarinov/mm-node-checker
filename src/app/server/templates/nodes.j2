@@ -1,0 +1,88 @@
+{% extends "inc/base.j2" %}
+{% block content %}
+  <nav>
+    <ul>
+      <li><h3>nodes</h3></li>
+      <li></li>
+      <li>
+        <form method="GET">
+          <fieldset role="group">
+            <select name="network">
+              <option value="">network...</option>
+              {% for network in networks %}
+                <option
+                  value="{{ network.value }}" {{ "selected" if network == form.network }}>{{ network.value }}</option>
+              {% endfor %}
+            </select>
+            <input type="submit" value="filter" class="outline">
+          </fieldset>
+
+        </form>
+      </li>
+      <li>
+        <a href="#" data-target="modal-add" onclick="toggleModal(event)">add</a>
+        <dialog id="modal-add">
+          <article>
+            <header>add nodes</header>
+            <form method="post">
+              <fieldset>
+                <label>Network
+                  <select name="network" required>
+                    {% for network in networks %}
+                      <option value="{{ network.value }}">{{ network.value }}</option>
+                    {% endfor %}
+                  </select>
+                </label>
+                <label>URLs
+                  <textarea name="urls" required></textarea>
+                </label>
+                <input type="submit" value="add">
+              </fieldset>
+            </form>
+          </article>
+        </dialog>
+      </li>
+      <li><a href="">import</a></li>
+      <li><a href="">export</a></li>
+    </ul>
+  </nav>
+
+  <table class="sortable">
+    <thead>
+    <tr class="sticky-top">
+      <th>network</th>
+      <th>status</th>
+      <th>url</th>
+      <th>height</th>
+      <th>ok</th>
+      <th>down</th>
+      <th>actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for n in nodes %}
+      <tr>
+        <td>{{ n.network.value }}</td>
+        <td>{{ n.status.value }}</td>
+        <td>{{ n.url }}</td>
+        <td>{{ n.height }}</td>
+        <td>{{ n.history_ok_count }}</td>
+        <td>{{ n.history_down_count }}</td>
+        <td>
+          <details class="dropdown">
+            <summary>actions</summary>
+            <ul>
+              <li><a href="/api-post/nodes/{{ n.id }}/check">check</a></li>
+              <li><a href="/api-delete/nodes/{{ n.id }}" {{ confirm }}>delete</a></li>
+              <li><a href="/api/nodes/{{ n.id }}">view</a></li>
+            </ul>
+          </details>
+        </td>
+      </tr>
+    {% endfor %}
+
+    </tbody>
+  </table>
+
+
+{% endblock %}
