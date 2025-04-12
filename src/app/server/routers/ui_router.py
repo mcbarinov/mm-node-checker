@@ -47,3 +47,9 @@ class ActionCBV(View):
         res = await self.core.node_service.add(form.network, form.urls)
         self.render.flash(f"nodes added: {res}")
         return redirect("/nodes")
+
+    @router.post("/nodes/import")
+    async def import_nodes(self, toml: Annotated[str, Form()]) -> RedirectResponse:
+        res = await self.core.node_service.import_from_toml(toml)
+        self.render.flash(f"nodes imported: {res}")
+        return redirect("/nodes")

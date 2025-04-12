@@ -1,12 +1,13 @@
 import logging
 import time
-from typing import cast
+from typing import Any, cast
 
 import anyio
 import pydash
+import tomlkit
 from bson import ObjectId
 from mm_crypto_utils import Network, NetworkType, random_proxy
-from mm_std import Result, async_synchronized, ok, utc_delta, utc_now
+from mm_std import Result, async_synchronized, ok, toml_dumps, toml_loads, utc_delta, utc_now
 from pydantic import BaseModel
 
 from app.core import rpc
@@ -25,6 +26,36 @@ class NetworkInfo(BaseModel):
 class NodeService(AppService):
     def __init__(self, base_params: AppServiceParams) -> None:
         super().__init__(base_params)
+
+    async def export_as_toml(self) -> str:
+        nodes = []
+        for network in Network:
+            urls = await self.db.node.collection.distinct("url", {"network": network})
+            if urls:
+                nodes.append(
+                    {
+                        "network": network.value,
+                        "urls": tomlkit.string("\n".join(urls), multiline=True),
+                    }
+                )
+
+        return toml_dumps({"nodes": nodes})
+
+    async def import_from_toml(self, toml: str) -> int:
+        result = 0
+        data: Any = toml_loads(toml)
+        for node in data["nodes"]:
+            network = Network(node["network"])
+            urls = node["urls"].strip().splitlines()
+            urls = [url.strip().removesuffix("/") for url in urls if url.strip()]
+            urls = pydash.uniq(urls)
+            for url in urls:
+                if await self.db.node.exists({"url": url}):
+                    continue
+                await self.db.node.insert_one(Node(id=ObjectId(), network=network, url=url))
+                result += 1
+
+        return result
 
     @async_synchronized
     async def add(self, network: Network, urls_multiline: str) -> int:
@@ -93,7 +124,7 @@ class NodeService(AppService):
         nodes = await self.db.node.find({"checked_at": None}, limit=limit)
         if len(nodes) < limit:
             nodes += await self.db.node.find(
-                {"checked_at": {"$lt": utc_delta(minutes=-5)}}, "checked_at", limit=limit - len(nodes)
+                {"checked_at": {"$lt": utc_delta(minutes=-1)}}, "checked_at", limit=limit - len(nodes)
             )
 
         async with anyio.create_task_group() as tg:
