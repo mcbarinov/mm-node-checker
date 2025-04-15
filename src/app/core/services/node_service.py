@@ -1,13 +1,13 @@
 import logging
 import time
-from typing import Any, cast
+from typing import Any
 
 import anyio
 import pydash
 import tomlkit
 from bson import ObjectId
 from mm_crypto_utils import Network, NetworkType, random_proxy
-from mm_std import Result, async_synchronized, ok, toml_dumps, toml_loads, utc_delta, utc_now
+from mm_std import DataResult, async_synchronized, toml_dumps, toml_loads, utc_delta, utc_now
 from pydantic import BaseModel
 
 from app.core import rpc
@@ -70,7 +70,7 @@ class NodeService(AppService):
 
         return result
 
-    async def check(self, id: ObjectId) -> Result[int]:
+    async def check(self, id: ObjectId) -> DataResult[int]:
         node = await self.db.node.get(id)
         logger.info("check", extra={"url": node.url, "network": node.network.value})
 
@@ -91,14 +91,14 @@ class NodeService(AppService):
 
         updated: dict[str, object] = {"checked_at": utc_now()}
 
-        if ok(res):
+        if res.is_ok():
             status = NodeStatus.OK
-            updated["height"] = res.ok
+            updated["height"] = res.unwrap()
             updated["check_history"] = ([True, *node.check_history])[:100]
             updated["last_ok_at"] = utc_now()
 
         else:
-            status = NodeStatus.from_error(cast(str, res.err))
+            status = NodeStatus.from_error(res.unwrap_err())
             updated["height"] = None
             updated["check_history"] = ([False, *node.check_history])[:100]
 
@@ -108,7 +108,7 @@ class NodeService(AppService):
                 network=node.network,
                 url=node.url,
                 proxy=proxy,
-                response={"ok": res.ok, "err": res.err, "data": res.data},
+                response=res.dict(),
                 status=status,
                 elapsed=round(time.perf_counter() - start_time, 2),
             )

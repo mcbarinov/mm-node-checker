@@ -1,12 +1,11 @@
 [project]
 name = "app"
-version = "0.0.2"
+version = "0.0.4"
 description = ""
 requires-python = ">=3.12"
 dependencies = [
     "mm-base6==0.0.17",
-    "mm-crypto-utils>=0.2.12",
-    "mm-std~=0.3.25",
+    "mm-crypto-utils>=0.2.15",
 ]
 
 [build-system]

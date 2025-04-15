@@ -110,12 +110,11 @@ wheels = [
 
 [[package]]
 name = "app"
-version = "0.0.2"
+version = "0.0.4"
 source = { editable = "." }
 dependencies = [
     { name = "mm-base6" },
     { name = "mm-crypto-utils" },
-    { name = "mm-std" },
 ]
 
 [package.dev-dependencies]
@@ -133,8 +132,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "mm-base6", specifier = "==0.0.17" },
-    { name = "mm-crypto-utils", specifier = ">=0.2.12" },
-    { name = "mm-std", specifier = "~=0.3.25" },
+    { name = "mm-crypto-utils", specifier = ">=0.2.15" },
 ]
 
 [package.metadata.requires-dev]
@@ -680,14 +678,14 @@ wheels = [
 
 [[package]]
 name = "mm-crypto-utils"
-version = "0.2.12"
+version = "0.2.15"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "loguru" },
     { name = "mm-std" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/43/c3/5c961b098899f2f71b955cdd1aa60de26d871b09d387461be9692cc33c17/mm_crypto_utils-0.2.12-py3-none-any.whl", hash = "sha256:d41e9d45e7752d1a211f3a799b851ee87c711c3e3cf3feececdbd9041344a624", size = 9146 },
+    { url = "https://files.pythonhosted.org/packages/71/2d/d454b33604f43efeea62fe2830933bc666cdd7d1e47c5904671b4ddcc836/mm_crypto_utils-0.2.15-py3-none-any.whl", hash = "sha256:a87560b5314d8cf6b387d9330d5d47ea10bd3073d5d5f43e54b1e10a4f0a799e", size = 9708 },
 ]
 
 [[package]]
@@ -715,12 +713,13 @@ wheels = [
 
 [[package]]
 name = "mm-std"
-version = "0.3.25"
+version = "0.3.30"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiohttp" },
     { name = "aiohttp-socks" },
     { name = "cryptography" },
+    { name = "multidict" },
     { name = "pydantic" },
     { name = "pydantic-settings" },
     { name = "pydash" },
@@ -730,7 +729,7 @@ dependencies = [
     { name = "tomlkit" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/11/8d/3704471a1eb627aaa221936c8a1f06f56b3668804c21f57e757d8ef9a6e6/mm_std-0.3.25-py3-none-any.whl", hash = "sha256:feb64df4c9327d170c6d097f41ea92ca879654e21d5fa67051d47e198545b407", size = 22516 },
+    { url = "https://files.pythonhosted.org/packages/4f/44/639f0d9b9663c7a8357b13668c31dfbf3b0e0c7aa617f072757a1b53ecbc/mm_std-0.3.30-py3-none-any.whl", hash = "sha256:2ea26c9f3850fc47ba4873bebb3ffaa17c0b1d991f7c7d890f688e0e76730dbc", size = 26624 },
 ]
 
 [[package]]
