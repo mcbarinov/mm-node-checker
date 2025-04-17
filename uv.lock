@@ -110,11 +110,12 @@ wheels = [
 
 [[package]]
 name = "app"
-version = "0.0.4"
+version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "mm-base6" },
     { name = "mm-crypto-utils" },
+    { name = "mm-std" },
 ]
 
 [package.dev-dependencies]
@@ -131,8 +132,9 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "mm-base6", specifier = "==0.0.17" },
-    { name = "mm-crypto-utils", specifier = ">=0.2.15" },
+    { name = "mm-base6", specifier = "==0.1.0" },
+    { name = "mm-crypto-utils", specifier = ">=0.3.0" },
+    { name = "mm-std", specifier = ">=0.4.2" },
 ]
 
 [package.metadata.requires-dev]
@@ -661,31 +663,32 @@ wheels = [
 
 [[package]]
 name = "mm-base6"
-version = "0.0.17"
+version = "0.1.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "fastapi", extra = ["standard"] },
     { name = "itsdangerous" },
     { name = "mm-jinja" },
     { name = "mm-mongo" },
+    { name = "mm-std" },
     { name = "mm-telegram" },
     { name = "psutil" },
     { name = "uvloop" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/49/77/aada71d21baa19e3236f6d87212460ca5b9a565e4dff0c22ef24f747754c/mm_base6-0.0.17-py3-none-any.whl", hash = "sha256:3a6d139b8097ddedf3cc71ba245e5f6b82a625a1019594171c34b6b9f8f63ae0", size = 50396 },
+    { url = "https://files.pythonhosted.org/packages/dc/ce/248b65aa49b6a8b6eaa40597c3d540973635df8cda01e10ea73bfd026ccb/mm_base6-0.1.0-py3-none-any.whl", hash = "sha256:1151e95c621898bedc7685e7632000688660a5388398e330c4ba6b9514d252e2", size = 51241 },
 ]
 
 [[package]]
 name = "mm-crypto-utils"
-version = "0.2.15"
+version = "0.3.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "loguru" },
     { name = "mm-std" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/71/2d/d454b33604f43efeea62fe2830933bc666cdd7d1e47c5904671b4ddcc836/mm_crypto_utils-0.2.15-py3-none-any.whl", hash = "sha256:a87560b5314d8cf6b387d9330d5d47ea10bd3073d5d5f43e54b1e10a4f0a799e", size = 9708 },
+    { url = "https://files.pythonhosted.org/packages/37/f4/015e3b86ccbef0d62c4008d960fe9a4e3ede5bc06702efdec21c6fd45b74/mm_crypto_utils-0.3.0-py3-none-any.whl", hash = "sha256:dd06b2555c875e2c33a402c04ade82e1cb7abaf9f22adeef8b9fad81ceae17ac", size = 9768 },
 ]
 
 [[package]]
@@ -701,19 +704,19 @@ wheels = [
 
 [[package]]
 name = "mm-mongo"
-version = "0.4.5"
+version = "0.5.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "mm-std" },
     { name = "pymongo" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/c6/d0/e3b7c36fad31a4d699ec197798f5552f2b0f5821eed89ff9aef552a6e697/mm_mongo-0.4.5-py3-none-any.whl", hash = "sha256:4c8bbf90ac8178f4cbe1fb5b4b83732e48e8308697b1628cd84e6e760b243199", size = 8849 },
+    { url = "https://files.pythonhosted.org/packages/d3/29/3d11ffa6dd179684351be2105b905554e543728981b7a8908848e8d08d21/mm_mongo-0.5.0-py3-none-any.whl", hash = "sha256:633c2a73811edfeaaf5a7607530714227ad2bc3524e2ac5e247e9950910f3d6c", size = 8827 },
 ]
 
 [[package]]
 name = "mm-std"
-version = "0.3.30"
+version = "0.4.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiohttp" },
@@ -729,18 +732,18 @@ dependencies = [
     { name = "tomlkit" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/4f/44/639f0d9b9663c7a8357b13668c31dfbf3b0e0c7aa617f072757a1b53ecbc/mm_std-0.3.30-py3-none-any.whl", hash = "sha256:2ea26c9f3850fc47ba4873bebb3ffaa17c0b1d991f7c7d890f688e0e76730dbc", size = 26624 },
+    { url = "https://files.pythonhosted.org/packages/11/5e/f4ba6bc61ad41c2e0e737900d7fd0beccca8cd7189076d744b0a18ad4857/mm_std-0.4.2-py3-none-any.whl", hash = "sha256:b709400fd6fc0864c0dcbc57cc0f21f6b00c5420f6a7349423604d2688fa02d9", size = 23481 },
 ]
 
 [[package]]
 name = "mm-telegram"
-version = "0.0.8"
+version = "0.1.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "mm-std" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/83/2c/9ce5e443e8d7a725d3b9aed0e7c16e252146ddaec0511e08eaf3777817b8/mm_telegram-0.0.8-py3-none-any.whl", hash = "sha256:d51b9fd620a4003351522f136a231cae40d215e603bc4221d394755a469e0005", size = 1908 },
+    { url = "https://files.pythonhosted.org/packages/6a/0e/7a61de50b1bec0ebce6145d8aea46c79ba2b92640b47fa3f03f37533fe3b/mm_telegram-0.1.0-py3-none-any.whl", hash = "sha256:c5baa26a2ca9fb6f65638dc4d2b48517ef62138c698fec77fb9d0950a6ea2aa2", size = 1864 },
 ]
 
 [[package]]

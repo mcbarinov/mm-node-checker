@@ -2,7 +2,7 @@ from bson import ObjectId
 from fastapi import APIRouter
 from mm_base6 import cbv
 from mm_mongo import MongoDeleteResult
-from mm_std import DataResult
+from mm_std import Result
 from starlette.responses import PlainTextResponse
 
 from app.core.db import Node
@@ -27,7 +27,7 @@ class CBV(View):
         return {network.value: [node.url for node in nodes] for network, nodes in nodes.items()}
 
     @router.post("/{id}/check")
-    async def check_node(self, id: ObjectId) -> DataResult[int]:
+    async def check_node(self, id: ObjectId) -> Result[int]:
         return await self.core.node_service.check(id)
 
     @router.get("/{id}")

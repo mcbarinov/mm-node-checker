@@ -4,15 +4,15 @@ from mm_base6 import BaseCore, CoreConfig
 
 from app.core.db import Db
 from app.core.services.node_service import NodeService
-from app.settings import DConfigSettings, DValueSettings
+from app.settings import DynamicConfigs, DynamicValues
 
 
-class Core(BaseCore[DConfigSettings, DValueSettings, Db]):
+class Core(BaseCore[DynamicConfigs, DynamicValues, Db]):
     node_service: NodeService
 
     @classmethod
     async def init(cls, core_config: CoreConfig) -> Self:
-        res = await super().base_init(core_config, DConfigSettings, DValueSettings, Db)
+        res = await super().base_init(core_config, DynamicConfigs, DynamicValues, Db)
         res.node_service = NodeService(res.base_service_params)
 
         return res
