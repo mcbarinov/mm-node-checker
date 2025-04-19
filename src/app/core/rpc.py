@@ -14,12 +14,12 @@ async def get_evm_height(url: str, proxy: str | None = None, timeout: float = 5)
         proxy=proxy,
         timeout=timeout,
     )
-    if res.is_error():
-        return res.to_result_err()
+    if res.is_err():
+        return res.to_err()
     try:
-        return res.to_result_ok(int(res.parse_json_body("result"), 16))
+        return res.to_ok(int(res.parse_json_body("result"), 16))
     except Exception as e:
-        return res.to_result_err(e)
+        return res.to_err(e)
 
 
 async def get_starknet_height(url: str, proxy: str | None = None, timeout: float = 5) -> Result[int]:
@@ -30,12 +30,12 @@ async def get_starknet_height(url: str, proxy: str | None = None, timeout: float
         proxy=proxy,
         timeout=timeout,
     )
-    if res.is_error():
-        return res.to_result_err()
+    if res.is_err():
+        return res.to_err()
     try:
-        return res.to_result_ok(res.parse_json_body("result"))
+        return res.to_ok(res.parse_json_body("result"))
     except Exception as e:
-        return res.to_result_err(e)
+        return res.to_err(e)
 
 
 async def get_solana_height(url: str, proxy: str | None = None, timeout: float = 5) -> Result[int]:
@@ -46,16 +46,16 @@ async def get_solana_height(url: str, proxy: str | None = None, timeout: float =
         proxy=proxy,
         timeout=timeout,
     )
-    if res.is_error():
-        return res.to_result_err()
+    if res.is_err():
+        return res.to_err()
     json_body = res.parse_json_body()
     err = pydash.get(json_body, "error.message")
     if err:
-        return res.to_result_err(f"service_error: {err}")
+        return res.to_err(f"service_error: {err}")
     try:
-        return res.to_result_ok(int(json_body["result"]))
+        return res.to_ok(int(json_body["result"]))
     except Exception as e:
-        return res.to_result_err(e)
+        return res.to_err(e)
 
 
 async def get_aptos_height(url: str, proxy: str | None = None, timeout: float = 5) -> Result[int]:
@@ -64,9 +64,9 @@ async def get_aptos_height(url: str, proxy: str | None = None, timeout: float = 
         proxy=proxy,
         timeout=timeout,
     )
-    if res.is_error():
-        return res.to_result_err()
+    if res.is_err():
+        return res.to_err()
     try:
-        return res.to_result_ok(int(res.parse_json_body()["block_height"]))
+        return res.to_ok(int(res.parse_json_body()["block_height"]))
     except Exception as e:
-        return res.to_result_err(e)
+        return res.to_err(e)
