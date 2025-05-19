@@ -21,10 +21,10 @@ class DynamicValues(DynamicValuesModel):
 
 
 def get_router() -> APIRouter:
-    from app.server.routers import check_router, node_router, ui_router
+    from app.server import routers
 
     router = APIRouter()
-    router.include_router(ui_router.router)
-    router.include_router(node_router.router)
-    router.include_router(check_router.router)
+    router.include_router(routers.ui.router)
+    router.include_router(routers.node.router)
+    router.include_router(routers.check.router)
     return router

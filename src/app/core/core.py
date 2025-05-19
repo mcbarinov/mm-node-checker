@@ -3,7 +3,7 @@ from typing import Self
 from mm_base6 import BaseCore, CoreConfig
 
 from app.core.db import Db
-from app.core.services.node_service import NodeService
+from app.core.services.node import NodeService
 from app.settings import DynamicConfigs, DynamicValues
 
 
