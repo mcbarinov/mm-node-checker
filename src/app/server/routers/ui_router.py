@@ -27,7 +27,7 @@ class PageCBV(View):
 
     @router.get("/networks")
     async def networks(self) -> HTMLResponse:
-        info = await self.core.node_service.get_networks_info()
+        info = await self.core.services.node.get_networks_info()
         return await self.render.html("networks.j2", info=info)
 
     @router.get("/checks")
@@ -44,12 +44,12 @@ class ActionCBV(View):
 
     @router.post("/nodes")
     async def add_nodes(self, form: Annotated[AddNodes, Form()]) -> RedirectResponse:
-        res = await self.core.node_service.add(form.network, form.urls)
+        res = await self.core.services.node.add(form.network, form.urls)
         self.render.flash(f"nodes added: {res}")
         return redirect("/nodes")
 
     @router.post("/nodes/import")
     async def import_nodes(self, toml: Annotated[str, Form()]) -> RedirectResponse:
-        res = await self.core.node_service.import_from_toml(toml)
+        res = await self.core.services.node.import_from_toml(toml)
         self.render.flash(f"nodes imported: {res}")
         return redirect("/nodes")

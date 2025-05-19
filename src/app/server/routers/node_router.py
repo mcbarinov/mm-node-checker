@@ -19,16 +19,16 @@ class CBV(View):
 
     @router.get("/export", response_class=PlainTextResponse)
     async def export_nodes(self) -> str:
-        return await self.core.node_service.export_as_toml()
+        return await self.core.services.node.export_as_toml()
 
     @router.get("/live")
     async def get_live_nodes(self) -> dict[str, list[str]]:
-        nodes = await self.core.node_service.get_live_nodes()
+        nodes = await self.core.services.node.get_live_nodes()
         return {network.value: [node.url for node in nodes] for network, nodes in nodes.items()}
 
     @router.post("/{id}/check")
     async def check_node(self, id: ObjectId) -> Result[int]:
-        return await self.core.node_service.check(id)
+        return await self.core.services.node.check(id)
 
     @router.get("/{id}")
     async def get_node(self, id: ObjectId) -> Node:
