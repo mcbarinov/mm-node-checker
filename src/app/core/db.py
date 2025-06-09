@@ -5,7 +5,7 @@ from datetime import datetime
 
 from bson import ObjectId
 from mm_base6 import BaseDb
-from mm_crypto_utils import Network
+from mm_cryptocurrency import Network
 from mm_mongo import AsyncMongoCollection, MongoModel
 from mm_std import utc_now
 from pydantic import Field

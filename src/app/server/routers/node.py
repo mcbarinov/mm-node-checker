@@ -2,7 +2,7 @@ from bson import ObjectId
 from fastapi import APIRouter
 from mm_base6 import cbv
 from mm_mongo import MongoDeleteResult
-from mm_std import Result
+from mm_result import Result
 from starlette.responses import PlainTextResponse
 
 from app.core.db import Node

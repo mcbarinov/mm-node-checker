@@ -6,8 +6,11 @@ import anyio
 import pydash
 import tomlkit
 from bson import ObjectId
-from mm_crypto_utils import Network, NetworkType, random_proxy
-from mm_std import Result, async_synchronized, toml_dumps, toml_loads, utc_delta, utc_now
+from mm_base6.core.utils import toml_dumps, toml_loads
+from mm_concurrency import async_synchronized
+from mm_cryptocurrency import Network, NetworkType, random_proxy
+from mm_result import Result
+from mm_std import utc_delta, utc_now
 from pydantic import BaseModel
 
 from app.core import rpc
@@ -98,7 +101,7 @@ class NodeService(AppService):
             updated["last_ok_at"] = utc_now()
 
         else:
-            status = NodeStatus.from_error(res.unwrap_error())
+            status = NodeStatus.from_error(res.unwrap_err())
             updated["height"] = None
             updated["check_history"] = ([False, *node.check_history])[:100]
 
@@ -108,7 +111,7 @@ class NodeService(AppService):
                 network=node.network,
                 url=node.url,
                 proxy=proxy,
-                response=res.to_dict(),
+                response=res.to_dict(safe_exception=True),
                 status=status,
                 elapsed=round(time.perf_counter() - start_time, 2),
             )
@@ -119,6 +122,8 @@ class NodeService(AppService):
 
     @async_synchronized
     async def check_next(self) -> None:
+        if not self.dynamic_configs.auto_check:
+            return
         logger.debug("check_next")
         limit = self.dynamic_configs.limit_concurrent_checks
         nodes = await self.db.node.find({"checked_at": None}, limit=limit)
