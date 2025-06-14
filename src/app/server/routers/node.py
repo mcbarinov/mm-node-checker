@@ -6,13 +6,13 @@ from mm_result import Result
 from starlette.responses import PlainTextResponse
 
 from app.core.db import Node
-from app.server.deps import View
+from app.core.types import AppView
 
 router = APIRouter(prefix="/api/nodes", tags=["node"])
 
 
 @cbv(router)
-class CBV(View):
+class CBV(AppView):
     @router.get("/")
     async def get_nodes(self) -> list[Node]:
         return await self.core.db.node.find({})

@@ -6,13 +6,13 @@ from mm_cryptocurrency import Network
 from pydantic import BaseModel
 from starlette.responses import HTMLResponse, RedirectResponse
 
-from app.server.deps import View
+from app.core.types import AppView
 
 router = APIRouter(include_in_schema=False)
 
 
 @cbv(router)
-class PageCBV(View):
+class PageCBV(AppView):
     @router.get("/")
     async def index(self) -> HTMLResponse:
         return await self.render.html("index.j2")
@@ -37,7 +37,7 @@ class PageCBV(View):
 
 
 @cbv(router)
-class ActionCBV(View):
+class ActionCBV(AppView):
     class AddNodes(BaseModel):
         network: Network
         urls: str

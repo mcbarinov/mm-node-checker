@@ -3,14 +3,14 @@ from mm_base6 import JinjaConfig
 from mm_cryptocurrency import Network
 from mm_jinja.filters import yes_no
 
-from app.core.core import Core
+from app.core.types import AppCore
 
 
-async def header_info(core: Core) -> Markup:
+async def header_info(core: AppCore) -> Markup:
     return Markup(f"auto check: {yes_no(core.dynamic_configs.auto_check)}")  # nosec  # noqa: S704
 
 
-async def footer_info(_core: Core) -> Markup:
+async def footer_info(_core: AppCore) -> Markup:
     return Markup("")  # nosec
 
 
