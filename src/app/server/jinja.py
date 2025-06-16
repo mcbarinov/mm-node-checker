@@ -1,7 +1,7 @@
 from markupsafe import Markup
 from mm_base6 import JinjaConfig
-from mm_cryptocurrency import Network
 from mm_jinja.filters import yes_no
+from mm_web3 import Network
 
 from app.core.types import AppCore
 

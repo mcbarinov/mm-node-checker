@@ -22,16 +22,16 @@ class DynamicValues(DynamicValuesModel):
     proxies_updated_at: DV[datetime | None] = DV(None)
 
 
-def configure_scheduler(core: AppCore) -> None:
+async def configure_scheduler(core: AppCore) -> None:
     """Configure background scheduler tasks."""
     core.scheduler.add_task("check", 3, core.services.node.check_next)
 
 
-def start_core(core: AppCore) -> None:
+async def start_core(core: AppCore) -> None:
     """Startup logic for the application."""
 
 
-def stop_core(core: AppCore) -> None:
+async def stop_core(core: AppCore) -> None:
     """Cleanup logic for the application."""
 
 

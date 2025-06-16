@@ -9,9 +9,9 @@ from bson import ObjectId
 from mm_base6 import BaseService
 from mm_base6.core.utils import toml_dumps, toml_loads
 from mm_concurrency import async_synchronized
-from mm_cryptocurrency import Network, NetworkType, random_proxy
 from mm_result import Result
 from mm_std import utc_delta, utc_now
+from mm_web3 import Network, NetworkType, random_proxy
 from pydantic import BaseModel
 
 from app.core import rpc

@@ -2,7 +2,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Form, Query
 from mm_base6 import cbv, redirect
-from mm_cryptocurrency import Network
+from mm_web3 import Network
 from pydantic import BaseModel
 from starlette.responses import HTMLResponse, RedirectResponse
 
