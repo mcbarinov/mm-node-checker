@@ -6,7 +6,7 @@ import anyio
 import pydash
 import tomlkit
 from bson import ObjectId
-from mm_base6 import BaseService
+from mm_base6 import Service
 from mm_base6.core.utils import toml_dumps, toml_loads
 from mm_concurrency import async_synchronized
 from mm_result import Result
@@ -27,7 +27,7 @@ class NetworkInfo(BaseModel):
     live_nodes: int
 
 
-class NodeService(BaseService):
+class NodeService(Service):
     core: AppCore
 
     async def export_as_toml(self) -> str:

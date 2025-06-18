@@ -51,7 +51,7 @@ class Node(MongoModel[ObjectId]):
         return len([x for x in self.check_history if x is False])
 
     __collection__: str = "node"
-    __indexes__ = "network, !url, last_ok_at"
+    __indexes__ = ["network", "!url", "last_ok_at"]
 
 
 class Check(MongoModel[ObjectId]):
