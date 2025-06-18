@@ -6,14 +6,10 @@ from mm_web3 import Network
 from app.core.types import AppCore
 
 
-async def header_info(core: AppCore) -> Markup:
-    return Markup(f"auto check: {yes_no(core.settings.auto_check)}")  # nosec  # noqa: S704
+class AppJinjaConfig(JinjaConfig[AppCore]):
+    filters = {}
+    globals = {"networks": list(Network)}
+    header_info_new_line = False
 
-
-async def footer_info(_core: AppCore) -> Markup:
-    return Markup("")  # nosec
-
-
-jinja_config = JinjaConfig(
-    header_info=header_info, header_info_new_line=False, footer_info=footer_info, globals={"networks": list(Network)}
-)
+    async def header(self) -> Markup:
+        return Markup(f"auto check: {yes_no(self.core.settings.auto_check)}")  # nosec  # noqa: S704
