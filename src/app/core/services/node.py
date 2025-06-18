@@ -77,7 +77,7 @@ class NodeService(BaseService):
         node = await self.core.db.node.get(id)
         logger.info("check", extra={"url": node.url, "network": node.network.value})
 
-        proxy = random_proxy(self.core.dynamic_values.proxies)
+        proxy = random_proxy(self.core.state.proxies)
 
         start_time = time.perf_counter()
         match node.network.network_type:
@@ -122,10 +122,10 @@ class NodeService(BaseService):
 
     @async_synchronized
     async def check_next(self) -> None:
-        if not self.core.dynamic_configs.auto_check:
+        if not self.core.settings.auto_check:
             return
         logger.debug("check_next")
-        limit = self.core.dynamic_configs.limit_concurrent_checks
+        limit = self.core.settings.limit_concurrent_checks
         nodes = await self.core.db.node.find({"checked_at": None}, limit=limit)
         if len(nodes) < limit:
             nodes += await self.core.db.node.find(

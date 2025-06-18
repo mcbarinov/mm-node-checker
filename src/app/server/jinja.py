@@ -7,7 +7,7 @@ from app.core.types import AppCore
 
 
 async def header_info(core: AppCore) -> Markup:
-    return Markup(f"auto check: {yes_no(core.dynamic_configs.auto_check)}")  # nosec  # noqa: S704
+    return Markup(f"auto check: {yes_no(core.settings.auto_check)}")  # nosec  # noqa: S704
 
 
 async def footer_info(_core: AppCore) -> Markup:
