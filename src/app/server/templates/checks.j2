@@ -1,27 +1,27 @@
 {% extends "inc/base.j2" %}
 {% block content %}
-  <div>
-    <h3>checks</h3>
-  </div>
+<div class="page-header">
+  <h2>checks</h2>
+</div>
 
-  <table>
-    <tr>
-      <th>network</th>
-      <th>url</th>
-      <th>proxy</th>
-      <th>status</th>
-      <th>elapsed</th>
-      <th>view</th>
-    </tr>
-    {% for c in checks %}
-      <tr>
-        <td>{{ c.network.value }}</td>
-        <td>{{ c.url }}</td>
-        <td>{{ c.proxy }}</td>
-        <td>{{ c.status.value }}</td>
-        <td>{{ c.elapsed }}</td>
-        <td><a href="/api/checks/{{ c.id }}">view</a></td>
-      </tr>
-    {% endfor %}
-  </table>
+<table>
+  <tr>
+    <th>network</th>
+    <th>url</th>
+    <th>proxy</th>
+    <th>status</th>
+    <th>elapsed</th>
+    <th>view</th>
+  </tr>
+  {% for c in checks %}
+  <tr>
+    <td>{{ c.network.value }}</td>
+    <td>{{ c.url }}</td>
+    <td>{{ c.proxy }}</td>
+    <td>{{ c.status.value }}</td>
+    <td>{{ c.elapsed }}</td>
+    <td><a href="/api/checks/{{ c.id }}">view</a></td>
+  </tr>
+  {% endfor %}
+</table>
 {% endblock %}

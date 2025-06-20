@@ -1,10 +1,10 @@
 [project]
 name = "app"
-version = "0.2.2"
+version = "0.2.3"
 description = ""
 requires-python = ">=3.13"
 dependencies = [
-    "mm-base6==0.5.2",
+    "mm-base6==0.6.1",
     "mm-web3~=0.5.1",
 ]
 
@@ -31,7 +31,6 @@ warn_no_return = false
 strict = true
 plugins = "pydantic.mypy"
 exclude = ["^tests/", "^cookiecutter", "^demo/"]
-
 
 [tool.ruff]
 line-length = 130
