@@ -6,6 +6,7 @@
 
 <table>
   <tr>
+    <th>created_at</th>
     <th>network</th>
     <th>url</th>
     <th>proxy</th>
@@ -15,6 +16,7 @@
   </tr>
   {% for c in checks %}
   <tr>
+    <td>{{ c.created_at | dt }}</td>
     <td>{{ c.network.value }}</td>
     <td>{{ c.url }}</td>
     <td>{{ c.proxy }}</td>
