@@ -18,7 +18,7 @@ async def get_evm_height(url: str, proxy: str | None = None, timeout: float = 5)
     if res.is_err():
         return res.to_result_err()
     try:
-        return res.to_result_ok(int(res.parse_json_body("result"), 16))
+        return res.to_result_ok(int(res.parse_json("result"), 16))
     except Exception as e:
         return res.to_result_err(e)
 
@@ -34,7 +34,7 @@ async def get_starknet_height(url: str, proxy: str | None = None, timeout: float
     if res.is_err():
         return res.to_result_err()
     try:
-        return res.to_result_ok(res.parse_json_body("result"))
+        return res.to_result_ok(res.parse_json("result"))
     except Exception as e:
         return res.to_result_err(e)
 
@@ -49,7 +49,7 @@ async def get_solana_height(url: str, proxy: str | None = None, timeout: float =
     )
     if res.is_err():
         return res.to_result_err()
-    json_body = res.parse_json_body()
+    json_body = res.parse_json()
     err = pydash.get(json_body, "error.message")
     if err:
         return res.to_result_err(f"service_error: {err}")
@@ -68,6 +68,6 @@ async def get_aptos_height(url: str, proxy: str | None = None, timeout: float = 
     if res.is_err():
         return res.to_result_err()
     try:
-        return res.to_result_ok(int(res.parse_json_body()["block_height"]))
+        return res.to_result_ok(int(res.parse_json()["block_height"]))
     except Exception as e:
         return res.to_result_err(e)

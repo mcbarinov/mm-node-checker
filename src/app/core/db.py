@@ -50,7 +50,7 @@ class Node(MongoModel[ObjectId]):
     def history_down_count(self) -> int:
         return len([x for x in self.check_history if x is False])
 
-    __collection__: str = "node"
+    __collection__ = "node"
     __indexes__ = ["network", "!url", "last_ok_at"]
 
 
@@ -63,7 +63,7 @@ class Check(MongoModel[ObjectId]):
     response: dict[str, object]
     created_at: datetime = Field(default_factory=utc_now)
 
-    __collection__: str = "check"
+    __collection__ = "check"
     __indexes__ = ["network", IndexModel([("created_at", -1)], expireAfterSeconds=3 * 60 * 60)]
 
 

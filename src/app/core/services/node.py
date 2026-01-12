@@ -27,8 +27,9 @@ class NetworkInfo(BaseModel):
     live_nodes: int
 
 
-class NodeService(Service):
-    core: AppCore
+class NodeService(Service[AppCore]):
+    def configure_scheduler(self) -> None:
+        self.core.scheduler.add_task("check_next_node", 3, self.core.services.node.check_next)
 
     async def export_as_toml(self) -> str:
         nodes = []
