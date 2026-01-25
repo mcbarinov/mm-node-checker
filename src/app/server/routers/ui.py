@@ -3,10 +3,17 @@ from typing import Annotated
 from fastapi import APIRouter, Form, Query
 from mm_base6 import cbv, redirect
 from mm_web3 import Network
-from pydantic import BaseModel
+from pydantic import BaseModel, BeforeValidator
 from starlette.responses import HTMLResponse, RedirectResponse
 
 from app.core.types import AppView
+
+
+def empty_to_none(v: str | None) -> str | None:
+    if v == "":
+        return None
+    return v
+
 
 router = APIRouter(include_in_schema=False)
 
@@ -18,7 +25,7 @@ class PageCBV(AppView):
         return await self.render.html("index.j2")
 
     @router.get("/nodes")
-    async def nodes(self, network: Annotated[Network | None, Query()] = None) -> HTMLResponse:
+    async def nodes(self, network: Annotated[Network | None, BeforeValidator(empty_to_none), Query()] = None) -> HTMLResponse:
         query = {}
         if network:
             query["network"] = network

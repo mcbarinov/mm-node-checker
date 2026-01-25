@@ -3,41 +3,46 @@
 
 <div class="page-header">
   <h2>nodes / {{ nodes | length }}</h2>
-  <sl-divider vertical></sl-divider>
-  <form class="inline">
-    <sl-select name="network" placeholder="network" value="{{ form.network }}">
+
+  <form>
+    <select name="network">
+      <option value="">network</option>
       {% for network in networks %}
-      <sl-option value="{{ network }}">{{ network }}</sl-option>
+      {{option(network, form.network)}}
       {% endfor %}
-    </sl-select>
-    <sl-button type="submit">filter</sl-button>
+    </select>
+    <button type="submit" class="outline">filter</button>
   </form>
-  <sl-divider vertical></sl-divider>
-  <sl-button-group>
-    <sl-button onclick="document.querySelector('#dialog-add').show()">add</sl-button>
-    <sl-button onclick="document.querySelector('#dialog-import').show()">import</sl-button>
-    <sl-button href="/api/nodes/export">export</sl-button>
-  </sl-button-group>
+
+  <nav>
+    <a onclick="openDialog('dialog-add')">add</a>
+    <a onclick="openDialog('dialog-import')">import</a>
+    <a href="/api/nodes/export">export</a>
+  </nav>
 </div>
 
-<sl-dialog id="dialog-add" label="add nodes">
-  <form method="post" class="stack">
-    <sl-select name="network" placeholder="network" required>
-      {% for network in networks %}
-      <sl-option value="{{ network }}">{{ network }}</sl-option>
-      {% endfor %}
-    </sl-select>
-    <sl-textarea name="urls" placeholders="URLs" required></sl-textarea>
-    <sl-button type="submit" variant="primary"></sl-button>
-  </form>
-</sl-dialog>
+<dialog id="dialog-add" label="add nodes">
+  <article>
+    <form method="post" class="stack">
+      <select name="network" placeholder="network" required>
+        {% for network in networks %}
+        <option value="{{ network }}">{{ network }}</option>
+        {% endfor %}
+      </select>
+      <textarea name="urls" placeholders="URLs" required></textarea>
+      <button type="submit">add</button>
+    </form>
+  </article>
+</dialog>
 
-<sl-dialog id="dialog-import" label="import nodes">
-  <form method="post" action="/nodes/import" class="stack">
-    <sl-textarea name="toml" placeholder="nodes as TOML document" rows="10" required></sl-textarea>
-    <sl-button type="submit" variant="primary">import</sl-button>
-  </form>
-</sl-dialog>
+<dialog id="dialog-import" label="import nodes">
+  <article>
+    <form method="post" action="/nodes/import" class="stack">
+      <textarea name="toml" placeholder="nodes as TOML document" rows="10" required></textarea>
+      <button type="submit">import</button>
+    </form>
+  </article>
+</dialog>
 
 <table class="sortable">
   <thead>
@@ -63,14 +68,14 @@
       <td>{{ n.history_down_count }}</td>
       <td>{{ n.checked_at | dt }}</td>
       <td>
-        <sl-dropdown>
-          <sl-button slot="trigger" caret>actions</sl-button>
-          <sl-menu>
-            <sl-menu-item><a href="/api-post/nodes/{{ n.id }}/check">check</a></sl-menu-item>
-            <sl-menu-item><a href="/api-delete/nodes/{{ n.id }}" {{ confirm }}>delete</a></sl-menu-item>
-            <sl-menu-item><a href="/api/nodes/{{ n.id }}">view</a></sl-menu-item>
-          </sl-menu>
-        </sl-dropdown>
+        <details class="dropdown">
+          <summary>actions</summary>
+          <ul>
+            <li><a href="/api-post/nodes/{{ n.id }}/check">check</a></li>
+            <li><a href="/api-delete/nodes/{{ n.id }}" {{ confirm }}>delete</a></li>
+            <li><a href="/api/nodes/{{ n.id }}">view</a></li>
+          </ul>
+        </details>
       </td>
     </tr>
     {% endfor %}
