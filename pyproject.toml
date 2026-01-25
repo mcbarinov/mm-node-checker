@@ -3,7 +3,7 @@ name = "app"
 version = "0.2.5"
 description = ""
 requires-python = ">=3.14"
-dependencies = ["mm-base6==0.8.1", "mm-web3~=0.5.6"]
+dependencies = ["mm-base6==0.8.2", "mm-web3~=0.5.6"]
 
 [build-system]
 requires = ["hatchling"]
