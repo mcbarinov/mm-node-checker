@@ -1,6 +1,8 @@
+"""Node management service: CRUD operations and health checks."""
+
 import logging
 import time
-from typing import Any
+from typing import cast
 
 import anyio
 import pydash
@@ -8,9 +10,9 @@ import tomlkit
 from bson import ObjectId
 from mm_base6 import Service
 from mm_base6.core.utils import toml_dumps, toml_loads
-from mm_concurrency import async_synchronized
+from mm_concurrency import async_mutex
 from mm_result import Result
-from mm_std import utc_delta, utc_now
+from mm_std import utc
 from mm_web3 import Network, NetworkType, random_proxy
 from pydantic import BaseModel
 
@@ -22,16 +24,22 @@ logger = logging.getLogger(__name__)
 
 
 class NetworkInfo(BaseModel):
+    """Summary info for a single network."""
+
     network: Network
     all_nodes: int
     live_nodes: int
 
 
 class NodeService(Service[AppCore]):
+    """Service for node management and health checks."""
+
     def configure_scheduler(self) -> None:
-        self.core.scheduler.add_task("check_next_node", 3, self.core.services.node.check_next)
+        """Schedule periodic node checks."""
+        self.core.scheduler.add("check_next_node", 3, self.core.services.node.check_next)
 
     async def export_as_toml(self) -> str:
+        """Export all nodes as TOML configuration."""
         nodes = []
         for network in Network:
             urls = await self.core.db.node.collection.distinct("url", {"network": network})
@@ -46,8 +54,9 @@ class NodeService(Service[AppCore]):
         return toml_dumps({"nodes": nodes})
 
     async def import_from_toml(self, toml: str) -> int:
+        """Import nodes from TOML configuration, returns count of new nodes added."""
         result = 0
-        data: Any = toml_loads(toml)
+        data = cast(dict[str, list[dict[str, str]]], toml_loads(toml))  # tomlkit returns dict-like TOMLDocument
         for node in data["nodes"]:
             network = Network(node["network"])
             urls = node["urls"].strip().splitlines()
@@ -61,8 +70,9 @@ class NodeService(Service[AppCore]):
 
         return result
 
-    @async_synchronized
+    @async_mutex
     async def add(self, network: Network, urls_multiline: str) -> int:
+        """Add nodes from multiline URL string, returns count of new nodes added."""
         result = 0
         urls = [url.strip().removesuffix("/") for url in urls_multiline.splitlines() if url.strip()]
         urls = pydash.uniq(urls)
@@ -75,6 +85,7 @@ class NodeService(Service[AppCore]):
         return result
 
     async def check(self, id: ObjectId) -> Result[int]:
+        """Check a single node's health and update its status."""
         node = await self.core.db.node.get(id)
         logger.info("check", extra={"url": node.url, "network": node.network.value})
 
@@ -93,13 +104,13 @@ class NodeService(Service[AppCore]):
             case _:
                 raise NotImplementedError
 
-        updated: dict[str, object] = {"checked_at": utc_now()}
+        updated: dict[str, object] = {"checked_at": utc()}
 
         if res.is_ok():
             status = NodeStatus.OK
             updated["height"] = res.unwrap()
             updated["check_history"] = ([True, *node.check_history])[:100]
-            updated["last_ok_at"] = utc_now()
+            updated["last_ok_at"] = utc()
 
         else:
             status = NodeStatus.from_error(res.unwrap_err())
@@ -121,8 +132,9 @@ class NodeService(Service[AppCore]):
 
         return res
 
-    @async_synchronized
+    @async_mutex
     async def check_next(self) -> None:
+        """Check the next batch of nodes that need checking."""
         if not self.core.settings.auto_check:
             return
         logger.debug("check_next")
@@ -130,21 +142,23 @@ class NodeService(Service[AppCore]):
         nodes = await self.core.db.node.find({"checked_at": None}, limit=limit)
         if len(nodes) < limit:
             nodes += await self.core.db.node.find(
-                {"checked_at": {"$lt": utc_delta(minutes=-1)}}, "checked_at", limit=limit - len(nodes)
+                {"checked_at": {"$lt": utc(minutes=-1)}}, "checked_at", limit=limit - len(nodes)
             )
 
         async with anyio.create_task_group() as tg:
             for node in nodes:
                 tg.start_soon(self.check, node.id, name=f"check_node_{node.id}")
 
-    @async_synchronized
+    @async_mutex
     async def get_live_nodes(self) -> dict[Network, list[Node]]:
+        """Get nodes that responded successfully in the last 5 minutes."""
         result: dict[Network, list[Node]] = {}
         for network in Network:
-            result[network] = await self.core.db.node.find({"network": network, "last_ok_at": {"$gt": utc_delta(minutes=-5)}})
+            result[network] = await self.core.db.node.find({"network": network, "last_ok_at": {"$gt": utc(minutes=-5)}})
         return result
 
     async def get_networks_info(self) -> list[NetworkInfo]:
+        """Get summary info for all networks."""
         live_nodes = await self.get_live_nodes()
         return [
             NetworkInfo(

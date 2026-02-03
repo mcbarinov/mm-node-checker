@@ -1,9 +1,9 @@
 [project]
 name = "app"
-version = "0.2.5"
+version = "0.2.6"
 description = ""
 requires-python = ">=3.14"
-dependencies = ["mm-base6==0.8.2", "mm-web3~=0.5.6"]
+dependencies = ["mm-base6==0.9.1", "mm-web3~=0.6.1"]
 
 [build-system]
 requires = ["hatchling"]
@@ -19,6 +19,7 @@ dev = [
     "pytest-httpserver~=1.1.3",
     "ruff~=0.14.14",
     "watchfiles~=1.1.0",
+    "ty~=0.0.14",
 ]
 
 [tool.mypy]
@@ -40,7 +41,8 @@ ignore = [
     "A005",     # flake8-builtins: stdlib-module-shadowing
     "ERA001",   # eradicate: commented-out-code
     "PT",       # flake8-pytest-style
-    "D",        # pydocstyle
+    "D203",     # pydocstyle: one-blank-line-before-class (conflicts with D211)
+    "D213",     # pydocstyle: multi-line-summary-second-line (conflicts with D212)
     "FIX",      # flake8-fixme
     "PLR0911",  # pylint: too-many-return-statements
     "PLR0912",  # pylint: too-many-branches
@@ -65,7 +67,7 @@ builtins-ignorelist = ["id"]
 [tool.ruff.lint.pep8-naming]
 classmethod-decorators = ["field_validator"]
 [tool.ruff.lint.per-file-ignores]
-"tests/*.py" = ["ANN", "S"]
+"tests/*.py" = ["ANN", "S", "D"]
 [tool.ruff.format]
 quote-style = "double"
 indent-style = "space"

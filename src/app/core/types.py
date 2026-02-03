@@ -1,3 +1,5 @@
+"""Type aliases for the application core and views."""
+
 from typing import TYPE_CHECKING
 
 from mm_base6 import Core, View

@@ -1,17 +1,23 @@
+"""Proxy management service: fetches and updates proxy list."""
+
 from mm_base6 import Service
-from mm_concurrency import async_synchronized
+from mm_concurrency import async_mutex
 from mm_http import http_request
-from mm_std import utc_now
+from mm_std import utc
 
 from app.core.types import AppCore
 
 
 class ProxyService(Service[AppCore]):
-    def configure_scheduler(self) -> None:
-        self.core.scheduler.add_task("update_proxies", 60, self.core.services.proxy.update)
+    """Service for managing proxy list updates."""
 
-    @async_synchronized
+    def configure_scheduler(self) -> None:
+        """Schedule periodic proxy list updates."""
+        self.core.scheduler.add("update_proxies", 60, self.core.services.proxy.update)
+
+    @async_mutex
     async def update(self) -> int:
+        """Fetch and update proxy list, returns count or -1 on error."""
         res = await http_request(self.core.settings.proxies_url)
         if res.is_err():
             await self.core.event("update_proxies", {"response": res.model_dump()})
@@ -19,5 +25,5 @@ class ProxyService(Service[AppCore]):
         proxies = (res.body or "").strip().splitlines()
         proxies = [p.strip() for p in proxies if p.strip()]
         self.core.state.proxies = proxies
-        self.core.state.proxies_updated_at = utc_now()
+        self.core.state.proxies_updated_at = utc()
         return len(proxies)

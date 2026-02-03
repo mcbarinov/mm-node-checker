@@ -1,14 +1,17 @@
+"""Application entry point."""
+
 import asyncio
 
 from mm_base6 import Core, run
 
-from app import config, telegram_bot
+from app import config
 from app.core.db import Db
 from app.core.services import ServiceRegistry
-from app.server import jinja
+from app.server.jinja import JinjaConfig
 
 
 async def main() -> None:
+    """Initialize and run the application."""
     core = await Core.init(
         config=config.config,
         settings_cls=config.Settings,
@@ -19,9 +22,8 @@ async def main() -> None:
 
     await run(
         core=core,
-        telegram_handlers=telegram_bot.handlers,
-        jinja_config_cls=jinja.AppJinjaConfig,
-        host="0.0.0.0",  # noqa: S104 # nosec
+        jinja_config_cls=JinjaConfig,
+        host="0.0.0.0",  # noqa: S104 # nosec - runs in Docker, host binding required
         port=3000,
         uvicorn_log_level="warning",
     )

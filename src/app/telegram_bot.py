@@ -1,3 +1,5 @@
+"""Telegram bot command handlers."""
+
 from mm_telegram import TelegramHandler
 
 # async def data_generate_one(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
