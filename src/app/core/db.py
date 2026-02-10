@@ -1,7 +1,5 @@
 """Database models and collections."""
 
-from __future__ import annotations
-
 import enum
 from datetime import datetime
 
@@ -15,7 +13,7 @@ from pymongo import IndexModel
 
 
 @enum.unique
-class NodeStatus(str, enum.Enum):
+class NodeStatus(enum.StrEnum):
     """Status of a node after check."""
 
     NOT_CHECKED = "not_checked"

@@ -54,7 +54,7 @@ async def get_solana_height(url: str, proxy: str | None = None, timeout: float =
     )
     if res.is_err():
         return res.to_result_err()
-    json_body = res.json_body_or_none()
+    json_body = res.json_body().unwrap_or(None)
     err = pydash.get(json_body, "error.message")
     if err:
         return res.to_result_err(f"service_error: {err}")
